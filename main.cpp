@@ -31,7 +31,6 @@ unsigned int shaderID;
 
 Camera camera;
 void generateMandelbulbSetThreads(int thread_count, int dim, std::vector<std::pair<glm::vec3, float>>& mandelbulb_positions);
-void generateMandelbulbMultithreaded(int dim, float x, float y, float z, std::vector<std::pair<glm::vec3, float>>& mandelbulb_positions);
 void generateMandelbulb(int dimensions, float x, float y, float z, std::vector<std::pair<glm::vec3, float>>& mandelbulb_positions);
 void render(Cube& cube, std::vector<std::pair<glm::vec3, float>>& mandelbulb_positions);
 
@@ -142,7 +141,6 @@ void processInput(GLFWwindow* window) {
 		PosZ += Speed;
 	}
 }
-
 
 
 int
@@ -367,41 +365,4 @@ void generateMandelbulbSetThreads(int thread_count, int dim, std::vector<std::pa
 		mandelbulb_positions.insert(mandelbulb_positions.end(), _.begin(), _.end());
 	printf("Size: %d", mandelbulb_positions.size());
 	
-}
-
-void generateMandelbulbMultithreaded(int dim, float x, float y, float z, std::vector<std::pair<glm::vec3, float>>& mandelbulb_positions) {
-	// split into 4
-	// t1   0 - 128 = 0 -> dim/4
-	// t2 129 - 256 = (dim/4)+1 -> (dim/2) 
-	// t3 257 - 384 = (dim/2)+1 -> (dim/4)*3
-	// t4 385 - 512 = ((dim/4)*3)+1 -> dim
-
-	std::vector<std::pair<glm::vec3, float>> t1_positions;
-	std::vector<std::pair<glm::vec3, float>> t2_positions;
-	std::vector<std::pair<glm::vec3, float>> t3_positions;
-	std::vector<std::pair<glm::vec3, float>> t4_positions;
-
-	std::thread t1(generateMandelbulbMt, 0, dim / 4, dim, x, y, z, std::ref(t1_positions));
-	std::thread t2(generateMandelbulbMt, (dim / 4) + 1, dim / 2, dim, x, y, z, std::ref(t2_positions));
-	std::thread t3(generateMandelbulbMt, (dim / 2) + 1, (dim / 4) * 3, dim, x, y, z, std::ref(t3_positions));
-	std::thread t4(generateMandelbulbMt, ((dim / 4) * 3) + 1, dim, dim, x, y, z, std::ref(t4_positions));
-
-	t1.join();
-	t2.join();
-	t3.join();
-	t4.join();
-
-	mandelbulb_positions.insert(mandelbulb_positions.end(), t1_positions.begin(), t1_positions.end());
-	std::cout << "Amount of Points: " << mandelbulb_positions.size() << "\n";
-	mandelbulb_positions.insert(mandelbulb_positions.end(), t2_positions.begin(), t2_positions.end());
-	std::cout << "Amount of Points: " << mandelbulb_positions.size() << "\n";
-	mandelbulb_positions.insert(mandelbulb_positions.end(), t3_positions.begin(), t3_positions.end());
-	std::cout << "Amount of Points: " << mandelbulb_positions.size() << "\n";
-	mandelbulb_positions.insert(mandelbulb_positions.end(), t4_positions.begin(), t4_positions.end());
-	std::cout << "Amount of Points: " << mandelbulb_positions.size() << "\n";
-
-	std::cout << "Size of t1_positions: " << t1_positions.size() << "\n";
-	std::cout << "Size of t2_positions: " << t2_positions.size() << "\n";
-	std::cout << "Size of t3_positions: " << t3_positions.size() << "\n";
-	std::cout << "Size of t4_positions: " << t4_positions.size() << "\n";
 }
