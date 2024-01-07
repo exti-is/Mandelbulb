@@ -1,114 +1,118 @@
 #include "Cube.h"
-Cube::Cube(glm::vec3 position, unsigned int shaderID) : currentShader{shaderID} {
-	float vertices[] = {
-		-0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
 
-		-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
+GLuint indices[] = {
+		0, 1, 2,  // Front face
+		2, 3, 0,
 
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
+		4, 5, 6,  // Right face
+		6, 7, 4,
 
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
+		8, 9, 10, // Back face
+		10, 11, 8,
 
-		-0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
+		12, 13, 14, // Left face
+		14, 15, 12,
 
-		-0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-	};
+		16, 17, 18, // Bottom face
+		18, 19, 16,
 
-	
+		20, 21, 22, // Top face
+		22, 23, 20
+};
+
+float cubeVertices[] = {
+		// Front Face
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+
+		// Right face
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+
+		 // Back face
+		 0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+
+		 // Left face
+	    -0.5f, -0.5f, -0.5f,
+	    -0.5f, -0.5f,  0.5f,
+	    -0.5f,  0.5f,  0.5f,
+	    -0.5f,  0.5f, -0.5f,
+
+		 // Bottom face
+	    -0.5f, -0.5f, -0.5f,
+	     0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+	    -0.5f, -0.5f,  0.5f,
+
+		 // Top face
+	    -0.5f,  0.5f,  0.5f,
+	 	 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+	    -0.5f,  0.5f, -0.5f
+};
+
+Cube::Cube(std::vector<std::pair<glm::mat4, float>> instanceTransforms, unsigned int shaderID) : currentShader{ shaderID }, instanceTransforms{ instanceTransforms } {
+	std::vector<glm::mat4> instanceTransformsVec = {};
+	for (auto& _ : instanceTransforms)
+		instanceTransformsVec.push_back(_.first);
+
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-	//temp disabling color, setting to white in shader.
-	model = glm::mat4(0.01f);
-	model = glm::translate(model, position);
-	model = glm::scale(model, glm::vec3(0.01));
-	//r = (float)(rand() % 100) / 100;
-	//g = (float)(rand() % 100) / 100;
-	//b = (float)(rand() % 100) / 100;
 
-	//r = 100;
-	//g = 100;
-	//b = 100;
+	// instancing //
+
+	glGenBuffers(1, &instanceVbo);
+	glBindBuffer(GL_ARRAY_BUFFER, instanceVbo);
+	glBufferData(GL_ARRAY_BUFFER, instanceTransformsVec.size() * sizeof(glm::mat4), &instanceTransformsVec[0], GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0); // mat 4 = 4 separate vec4s
+	glVertexAttribDivisor(2, 1);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+	glEnableVertexAttribArray(3);
+	glVertexAttribDivisor(3, 1);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+	glEnableVertexAttribArray(4);
+	glVertexAttribDivisor(4, 1);
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+	glEnableVertexAttribArray(5);
+	glVertexAttribDivisor(5, 1);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	////////////////
 }
-
-Cube::~Cube() { }
-
-void Cube::setModel(glm::mat4 newModel) {
-	model = newModel;
-}
-
-void Cube::setColor(float r, float g, float b) {
-	this->r = r;
-	this->g = g;
-	this->b = b;
-}
-
 
 void Cube::draw() {
 	glBindVertexArray(vao);
-	glUniformMatrix4fv(glGetUniformLocation(currentShader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-	glUniform3f(glGetUniformLocation(currentShader, "color"), r, g, b);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	// possibly unbind here..
-}
-
-void Cube::draw(glm::vec3 newPosition, float r_value) { // r value = spherical.r
-	glBindVertexArray(vao);
-	glUniformMatrix4fv(glGetUniformLocation(currentShader, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-	model = glm::mat4(0.01f);
-	model = glm::translate(model, newPosition);
-	model = glm::scale(model, glm::vec3(0.01));
-
-	//std::cout << g << "a\n";
-
-	glUniform3f(glGetUniformLocation(currentShader, "color"), r, g, b);
-	//glUniform1i(glGetUniformLocation(currentShader, "r"), r_value);
-	//glUniform1i(glGetUniformLocation(currentShader, "mandelbulb"), 1);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glUniform3f(glGetUniformLocation(currentShader, "color"), 0.85f, 0.85f, 0.85f);
+	glDrawElementsInstanced(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0, instanceTransforms.size());
 
-	//glUniform1i(glGetUniformLocation(currentShader, "mandelbulb"), 0);
-
-	// possibly unbind here..
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

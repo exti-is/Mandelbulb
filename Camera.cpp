@@ -1,8 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera() {
-
-}
+Camera::Camera() { }
 
 void Camera::processInput(GLFWwindow* window) {
 	float deltaTime = 0.f;

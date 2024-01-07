@@ -30,8 +30,6 @@ public:
 	glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
 
 	void processInput(GLFWwindow* window);
-	// totally how you're meant to do that..
-	
 
 	glm::mat4 GetViewMatrix() { return glm::lookAt(cameraPos, cameraPos + cameraFront, up); }
 

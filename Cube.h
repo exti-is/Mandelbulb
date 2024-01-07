@@ -1,3 +1,6 @@
+#ifndef MANDELBULB_SRC_CUBE
+#define MANDELBULB_SRC_CUBE
+
 #pragma once
 
 #include <GL/glew.h>
@@ -11,31 +14,23 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include <vector>
 
 class Cube
 {
 public:
-	Cube(glm::vec3 position, unsigned int shaderID);
-	~Cube();
-
-	void setModel(glm::mat4 newModel);
-	inline glm::mat4 getModel() { return model; }
-
-	void setColor(float r, float g, float b);
-
+	Cube(std::vector<std::pair<glm::mat4, float>> instanceTransforms, unsigned int shaderID);
 	void draw();
-	void draw(glm::vec3 newPosition, float r_value);
+
 private:
 	unsigned int vao;
 	unsigned int vbo;
-
-	glm::mat4 model;
+	unsigned int ebo; 
+	unsigned int instanceVbo;
 	unsigned int currentShader;
 
-	float r;
-	float g;
-	float b;
-
+	std::vector<std::pair<glm::mat4, float>> instanceTransforms;
 };
 
+
+#endif
